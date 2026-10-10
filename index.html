@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .open-flap {
+            transform: rotateX(180deg) !important;
+            z-index: 0 !important;
+        }
+
+        /* Vinyl animation */
+        #vinyl.playing {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-red-200 py-20 overflow-x-hidden min-h-screen flex items-center justify-center">
+    <div class="max-w-3xl w-full mx-auto px-4">
+        <!-- Envelope  -->
+        <div class="mb-10 relative flex justify-center items-center">
+            
+            <!-- Envelope Wrapper -->
+            <div id="kartu"
+                class="relative w-full max-w-xl h-[360px] bg-slate-200 rounded-2xl shadow-2xl flex items-center justify-center transition-all duration-700 transform hover:scale-[1.01] perspective-1000">
+                
+                <!-- Envelope Top  -->
+                <div id="flap"
+                    class="absolute top-0 left-0 w-full h-[55%] bg-slate-300 shadow-md z-20 origin-top transition-transform duration-700 ease-in-out transform-style-3d border-t border-slate-200"
+                    style="clip-path: polygon(0 0, 100% 0, 50% 100%);"></div>
+
+                <!-- Envelope Side & Bottom Folds -->
+                <div class="absolute inset-0 bg-slate-300/80 pointer-events-none z-10"
+                    style="clip-path: polygon(0 0, 48% 50%, 0 100%);"></div>
+                <div class="absolute inset-0 bg-slate-300/80 pointer-events-none z-10"
+                    style="clip-path: polygon(100% 0, 52% 50%, 100% 100%);"></div>
+                <div class="absolute inset-0 bg-slate-100 pointer-events-none z-15"
+                    style="clip-path: polygon(0 100%, 50% 45%, 100% 100%);"></div>
+
+                <!-- Interactive Wax Seal -->
+                <div id="seal-container" class="z-30 text-center translate-y-2">
+                    <button id="tombol"
+                        class="relative bg-gradient-to-br from-red-600 via-red-700 to-red-900 text-amber-200 rounded-full shadow-2xl border-4 border-red-800/60 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center w-20 h-20 mx-auto outline-none ring-4 ring-red-900/20">
+                        <!-- Wax Seal Inner Details -->
+                        <div class="w-14 h-14 rounded-full border border-dashed border-amber-300/40 flex items-center justify-center bg-red-800/40 shadow-inner">
+                            <span class="text-2xl font-serif">✉️</span>
+                        </div>
+                    </button>
+                    <p class="text-slate-600 font-medium text-sm animate-pulse mt-6 bg-white/80 px-4 py-1.5 rounded-full inline-block backdrop-blur-md shadow-sm border border-slate-200">
+                        Click the seal to open...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kartu Ucapan (Hidden) -->
+            <div id="ucapan"
+                class="bg-[url(/Paper.jpeg)] bg-cover w-full h-[80vh] pt-28 pl-32 rounded-3xl shadow-2xl hidden opacity-0 transition-all duration-1000 transform translate-y-10" 
+                style="font-family: 'Times New Roman', Times, serif;">
+                <h1 class="mb-1 text-2xl font-bold animate-bounce text-slate-800">
+                    Happy Birthday! 
+                </h1>
+                <p class="text-gray-900 text-lg leading-relaxed">    
+                  Hii Iris, how are u? I hope you are doing well. thx for being my friend, and thanks for helping me a lot. i hope you become more patient stronger and kinder person. i hope u have a great day and a great year ahead. i wish u all 
+                  the best in your life, i wish u could become a great doctor someday. wish u all the best God bless u.
+                </p>
+            </div>
+        </div>
+
+        <!-- Lagu -->
+        <div class="flex justify-center mt-5">
+
+            <div class="flex items-center gap-3 bg-white/90 rounded-2xl shadow-md px-4 py-3 w-full max-w-md">
+
+                <!-- Vinyl -->
+                <div id="vinyl"
+                    class="w-12 h-12 rounded-full bg-[repeating-radial-gradient(circle,#111_0px,#111_1.5px,#222_2.5px,#111_3.5px)] relative flex-shrink-0">
+
+                    <!-- Vinyl Hole -->
+                    <div class="absolute w-2 h-2 bg-white rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-sm truncate">Hold On Till May</p>
+                    <p class="text-gray-500 text-xs">Pierce The Veil</p>
+                </div>
+
+                <!-- Play Button -->
+                <button id="playButton"
+                    class="bg-gray-300 hover:bg-gray-400 rounded-full w-9 h-9 flex items-center justify-center shadow-sm">
+
+                    <!-- CSS Play Icon -->
+                    <span id="playIcon"
+                        class="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-white ml-0.5">
+                    </span>
+
+                </button>
+
+            </div>
+
+            <audio id="music">
+                <source src="HoldOnTillMay.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+    </div>
+
+    <script>
+        const kartu = document.getElementById('kartu');
+        const flap = document.getElementById('flap');
+        const sealContainer = document.getElementById('seal-container');
+        const ucapan = document.getElementById('ucapan');
+        const button = document.getElementById('tombol');
+
+        button.addEventListener('click', function () {
+            //  remove the wax seal
+            sealContainer.classList.add('transition-opacity', 'duration-300', 'opacity-0', 'pointer-events-none');
+
+            //  Open top
+            setTimeout(() => {
+                flap.classList.add('open-flap');
+            }, 200);
+
+            //  ilangin envelope tunjukin kartuu
+            setTimeout(() => {
+                kartu.classList.add('scale-95', 'opacity-0', 'pointer-events-none');
+
+                setTimeout(() => {
+                    kartu.classList.add('hidden');
+
+                    // Buka kartu nya
+                    ucapan.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        ucapan.classList.remove('opacity-0', 'translate-y-10');
+                    }, 50);
+                }, 500);
+            }, 800);
+        });
+
+
+        // Musik playernya 
+        const music = document.getElementById("music");
+        const playButton = document.getElementById("playButton");
+        const vinyl = document.getElementById("vinyl");
+        const playIcon = document.getElementById("playIcon");
+
+        playButton.onclick = () => {
+
+            if (music.paused) {
+
+                music.play();
+                vinyl.classList.add("playing");
+
+                // Pause icon
+                playIcon.className =
+                    "flex items-center justify-center gap-[3px] w-[10px] h-[14px]";
+
+                playIcon.innerHTML = `
+                    <span class="w-[3px] h-[12px] bg-white rounded-sm"></span>
+                    <span class="w-[3px] h-[12px] bg-white rounded-sm"></span>
+                `;
+
+            } else {
+
+                music.pause();
+                vinyl.classList.remove("playing");
+
+                // Play icon
+                playIcon.className =
+                    "w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-white ml-0.5";
+
+                playIcon.innerHTML = "";
+            }
+        };
+    </script>
+
+ <!-- aku keren-->
+</body>
+
+</html>
